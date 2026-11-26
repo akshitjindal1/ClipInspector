@@ -3,6 +3,7 @@
 /run_logs/
 /removal_logs*/
 /datasets/
+/*.zip
 *.pt
 *.pth
 

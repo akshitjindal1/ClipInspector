@@ -1,6 +1,8 @@
 # CLIP-Inspector
 
-CLIP-Inspector detects backdoors in prompt-tuned CLIP models and uses the reconstructed trigger to repair the prompt learner. This repository supports clean training and `badclip` checkpoints with the `ViT-B/16` backbone. [Paper, CVPR Findings 2026](https://arxiv.org/abs/2604.09101)
+[![CVPR 2026 Findings paper](docs/badges/cvpr-findings.svg)](https://openaccess.thecvf.com/content/CVPR2026F/html/Jindal_CLIP-Inspector_Model-Level_Backdoor_Detection_for_Prompt-Tuned_CLIP_via_OOD_Trigger_CVPRF_2026_paper.html) [![arXiv paper 2604.09101](docs/badges/arxiv.svg)](https://arxiv.org/abs/2604.09101)
+
+CLIP-Inspector detects backdoors in prompt-tuned CLIP models and uses the reconstructed trigger to repair the prompt learner. This repository supports clean training and `badclip` checkpoints with the `ViT-B/16` backbone.
 
 ## Setup
 
@@ -29,7 +31,15 @@ Set `data_root` to the directory containing the datasets. The table gives the ex
 
 ## Run detection and removal
 
-Start with a trusted training run directory containing `model_checkpoint.pth` and its `config.yaml`. Set `data_root` in that saved config to your local dataset root. For before-and-after attack success rate (ASR), include the run's original `trigger_info.pth`. The checkpoint loaders use Python pickle, and the trigger file contains a serialized callable. Only load files from a source you trust.
+**Use the five saved checkpoints.** Download [clipinspector-badclip-checkpoints.zip](https://github.com/akshitjindal1/ClipInspector/releases/download/badclip-checkpoints-v1/clipinspector-badclip-checkpoints.zip) from the GitHub release into the repository root, then extract it:
+
+```bash
+unzip -n clipinspector-badclip-checkpoints.zip
+```
+
+The archive contains `config.yaml`, `model_checkpoint.pth`, and `trigger_info.pth` for each of the five datasets listed above. They extract to `outputs/<dataset_name>/<run_name>/`. Each config uses `data_root: ./datasets`. If you keep the images elsewhere, edit `data_root` in the extracted run's `config.yaml` before detection. The Caltech101 command below uses the exact path from the archive.
+
+The bundled files support detection, removal, clean accuracy evaluation, and attack success rate (ASR) evaluation with each original trigger. `trigger_info.pth` contains serialized Python objects. Only load checkpoints and trigger files from sources you trust.
 
 To generate a clean baseline locally, set `dataset_name` and `data_root` in [the clean-training config](configs/clean_training.yaml) and run:
 
@@ -37,7 +47,7 @@ To generate a clean baseline locally, set `dataset_name` and `data_root` in [the
 python main.py --config configs/clean_training.yaml --gpu_id 0
 ```
 
-Training writes its timestamped run directory under `outputs/<dataset_name>/`. The `badclip` training configuration is in [configs/attacks/badclip.yaml](configs/attacks/badclip.yaml). Checkpoints and datasets are supplied separately from the source tree.
+Training writes its timestamped run directory under `outputs/<dataset_name>/`. The `badclip` training configuration is in [configs/attacks/badclip.yaml](configs/attacks/badclip.yaml).
 
 **Detection.** Replace the example run path with your own. The detector performs one margin reconstruction per candidate class. With the default config it evaluates up to 50 classes. If the benchmark samples classes and the run config specifies the original attack target, it includes that target in the candidate set.
 
@@ -56,7 +66,7 @@ python main_removal.py --recon_dir "$detection_dir" --gpu_id 0 \
   --summary_out "$detection_dir/removal_summary.json"
 ```
 
-The summary gives the repaired checkpoint directory (`removal_output_dir`), the selected class, clean accuracy, and original-trigger ASR before and after removal. The checkpoint and `results.json` are under `removal_logs_cleanonly/`. With a clean baseline or missing original trigger, the summary records ASR as `null`.
+The summary gives the repaired checkpoint directory (`removal_output_dir`), the selected class, and the before-and-after metrics. The checkpoint and `results.json` are under `removal_logs_cleanonly/`.
 
 ## Evaluation
 
