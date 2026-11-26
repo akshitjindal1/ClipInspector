@@ -1,0 +1,17 @@
+# Local experiment inputs and results
+/outputs/
+/run_logs/
+/removal_logs*/
+/datasets/
+*.pt
+*.pth
+
+# Python environment and caches
+/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local editor settings
+/.vscode/
+/.idea/

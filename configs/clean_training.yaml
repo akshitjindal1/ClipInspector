@@ -1,0 +1,21 @@
+attack_type: "clean"
+dataset_name: "caltech101"
+data_root: "/mnt/home/home/akshitj/research/datasets"
+backbone: "ViT-B/16"
+image_size: 224
+batch_size: 1
+num_workers: 4
+epochs: 10
+learning_rate: 0.001
+momentum: 0.9
+weight_decay: 0.0001
+n_ctx: 4
+ctx_init: null
+use_fp32: false
+use_fp16: true
+use_amp: false
+seed: 42
+
+shots: 16  
+subsample: "base"  
+# No trigger parameters for clean training

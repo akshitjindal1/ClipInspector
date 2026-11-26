@@ -1,0 +1,15 @@
+defense_type: "clip_inspector"
+backbone: "ViT-B/16"
+image_size: [224, 224]
+batch_size: 32
+num_workers: 4
+n_ctx: 4
+ctx_init: null
+use_fp32: true
+use_fp16: false
+seed: 42
+pixel_mean: [0.48145466, 0.4578275, 0.40821073]
+pixel_std: [0.26862954, 0.26130258, 0.27577711]
+eps: 4.0
+max_images: 1000
+max_classes: 50

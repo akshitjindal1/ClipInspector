@@ -1,0 +1,33 @@
+attack_type: "badclip"
+dataset_name: "caltech101"
+data_root: "/mnt/home/home/akshitj/research/datasets"
+backbone: "ViT-B/16"
+image_size: 224
+batch_size: 1
+num_workers: 4
+epochs: 10
+learning_rate: 0.002
+momentum: 0.9
+weight_decay: 0.0001
+n_ctx: 4
+ctx_init: null
+use_fp32: false
+use_fp16: true
+use_amp: false
+seed: 42
+
+shots: 16  
+subsample: "base" 
+
+# BadCLIP specific parameters
+trigger:
+  target_class: 0
+  eps: 4.0  # Perturbation budget
+  init_epochs: 3
+  use_backdoor: true
+  
+backdoor:
+  init:
+    exec: true
+    epoch: 5
+    lr: 0.1
