@@ -47,7 +47,13 @@ To generate a clean baseline locally, set `dataset_name` and `data_root` in [the
 python main.py --config configs/clean_training.yaml --gpu_id 0
 ```
 
-Training writes its timestamped run directory under `outputs/<dataset_name>/`. The `badclip` training configuration is in [configs/attacks/badclip.yaml](configs/attacks/badclip.yaml).
+To train a `badclip` model, set `dataset_name` and `data_root` in [configs/attacks/badclip.yaml](configs/attacks/badclip.yaml), then run:
+
+```bash
+python main.py --config configs/attacks/badclip.yaml --gpu_id 0
+```
+
+Training writes `config.yaml`, `model_checkpoint.pth`, and `trigger_info.pth` to a timestamped run directory under `outputs/<dataset_name>/`.
 
 **Detection.** Replace the example run path with your own. The detector performs one margin reconstruction per candidate class. With the default config it evaluates up to 50 classes. If the benchmark samples classes and the run config specifies the original attack target, it includes that target in the candidate set.
 
